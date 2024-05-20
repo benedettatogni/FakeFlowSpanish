@@ -160,9 +160,11 @@ cython_debug/
 #.idea/
 
 data/fakedes/*
+processed_files/*
 features/SBW-vectors-300-min5.txt
 features/emotional/*
 features/sentiment/*
 features/hurtful/*
 features/hyperbolic/*
 features/imageability/*
+outputs/*
