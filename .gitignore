@@ -158,3 +158,11 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+data/fakedes/*
+features/SBW-vectors-300-min5.txt
+features/emotional/*
+features/sentiment/*
+features/hurtful/*
+features/hyperbolic/*
+features/imageability/*
