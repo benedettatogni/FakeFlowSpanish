@@ -231,7 +231,7 @@ class FakeFlow:
         dev_apply_df["prediction"] = list(Y_dev_pred)
         Y_dev = np.argmax(np.array(self.dev['label'].to_list()), axis=1)
         dev_apply_df["label"] = list(Y_dev)
-        dev_apply_df.to_csv("data/fakedes/results_classifier_dev.csv", index=False)
+        dev_apply_df.to_csv("outputs/results_classifier_dev.csv", index=False)
 
     def apply_on_test(self):
         dict_test = {"id": self.test["id"].tolist()}
@@ -255,7 +255,7 @@ class FakeFlow:
         test_apply_df["prediction"] = list(Y_test_pred)
         Y_test = np.argmax(np.array(self.test['label'].to_list()), axis=1)
         test_apply_df["label"] = list(Y_test)
-        test_apply_df.to_csv("data/fakedes/results_classifier_test.csv", index=False)
+        test_apply_df.to_csv("outputs/results_classifier_test.csv", index=False)
 
     def evaluate_on_test(self):
         Y_test_pred, Y_test_attn = self.model.predict(
@@ -284,37 +284,6 @@ class FakeFlow:
         Y_dev = np.argmax(np.array(self.dev['label'].to_list()), axis=1)
         print(classification_report(Y_dev, Y_dev_pred))
 
-    def find_best_threshold(self):
-        df = pd.read_csv("data/fakedes/results_classifier_dev.csv")
-        list_thresholds = df["conf_fake"].unique().tolist()
-        min_threshold = min(list_thresholds)
-        max_threshold = max(list_thresholds)
-        list_thresholds = np.arange(min_threshold, max_threshold, 0.001)
-        # Find best threshold on dev:
-        best_threshold = 0.0
-        best_score = 0.0
-        for threshold in list_thresholds:
-            predictions = [1 if x >= threshold else 0 for x in df["conf_fake"]]
-            labels = df["label"].values.tolist()
-            tmp_f1_score = f1_score(labels, predictions, average="macro")
-            if tmp_f1_score > best_score:
-                best_threshold = threshold
-                best_score = tmp_f1_score
-        return best_threshold
-
-    def apply_best_threshold(self, threshold):
-        df = pd.read_csv("data/fakedes/results_classifier_test.csv")
-        # Apply threshold on test:
-        predictions = [1 if x >= threshold else 0 for x in df["conf_fake"]]
-        labels = df["label"].values.tolist()
-        print("Test with threshold")
-        print(classification_report(labels, predictions))
-        print("Fake F1 score:", f1_score(labels, predictions, average="binary", pos_label=1))
-        print("True F1 score:", f1_score(labels, predictions, average="binary", pos_label=0))
-        print("Macro F1 score:", f1_score(labels, predictions, average="macro"))
-        print("Accuracy score:", accuracy_score(labels, predictions))
-        print("Best threshold:", threshold)
-
     def run_model(self, model_path, type_='train', use_branches='both_branches'):
         # -- creating the directory in case it doesn't exist
         model_dir = "/".join(model_path.split("/")[:-1])
@@ -323,7 +292,8 @@ class FakeFlow:
         # 1, Compile the model
         self.session = tf.InteractiveSession(config=config)
         self.model = self.network(use_branches)
-        self.model.compile(optimizer=self.parameters['optimizer'], loss=['categorical_crossentropy', None], metrics=['accuracy'])
+        opt = keras.optimizers.Adam(lr=0.0001)
+        self.model.compile(optimizer=opt, loss=['categorical_crossentropy', None], metrics=['accuracy'])
 
         # 2, Prep
         callback = [EarlyStopping(min_delta=0.0001, patience=4, verbose=2, restore_best_weights=True),
@@ -381,8 +351,6 @@ class FakeFlow:
                 callbacks=callback)
             self.evaluate_on_dev()
             self.apply_on_dev()
-            # Find best threshold on dev:
-            best_threshold = self.find_best_threshold()
             # Test model:
             if os.path.exists(model_path):
                 print('--------Model exists: ' + model_path)
@@ -393,8 +361,6 @@ class FakeFlow:
                 exit(1)
             self.evaluate_on_test()
             self.apply_on_test()
-            # Apply threshold on test:
-            self.apply_best_threshold(best_threshold)
         else:
             print('Mode not defined!')
             exit(1)

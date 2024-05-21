@@ -12,13 +12,15 @@ df1 = df1[~df1["word"].str.contains(" ")]
 # Keep only the following columns:
 df1 = df1[["word", "anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]]
 # Lemmatize with SpaCy:
-df1["word"] = df1["word"].apply(lambda row: " ".join([w.lemma_ for w in nlp(row)]))
+df1["word"] = df1["word"].apply(lambda row: " ".join([w.lemma_ for w in nlp(row) if not w.is_stop]))
 # Drop multi-word expressions:
 df1 = df1[~df1["word"].str.contains(" ")]
 # Lower-case words:
 df1["word"] = df1["word"].str.lower()
 # Remove duplicates:
 df1 = df1.drop_duplicates()
+# Drop empty rows:
+df1 = df1[df1["word"] != ""]
 # Store the resource:
 Path("./features/emotional/").mkdir(parents=True, exist_ok=True)
 df1.to_csv("./features/emotional/emotions_resource.txt", sep="\t", index=False)
@@ -31,9 +33,15 @@ df = df[~df["word"].str.contains(" ")]
 # Keep only the following columns:
 df = df[["word", "positive", "negative"]]
 # Lemmatize with SpaCy:
-df["word"] = df["word"].apply(lambda row: " ".join([w.lemma_ for w in nlp(row)]))
+df["word"] = df["word"].apply(lambda row: " ".join([w.lemma_ for w in nlp(row) if not w.is_stop]))
+# Drop multi-word expressions:
+df = df[~df["word"].str.contains(" ")]
+# Lower-case words:
+df["word"] = df["word"].str.lower()
 # Remove duplicates:
 df = df.drop_duplicates()
+# Drop empty rows:
+df = df[df["word"] != ""]
 # Store the resource:
 Path("./features/sentiment/").mkdir(parents=True, exist_ok=True)
 df.to_csv("./features/sentiment/sentiment_resource.txt", sep="\t", index=False)

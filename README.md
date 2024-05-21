@@ -114,7 +114,6 @@ This is the list of parameters the user can pass as input:
 | dense_2     | d2 | second dense layer (int) | `8` | no
 | dense_3     | d3 | third dense layer (int) | `8` | no
 | dropout     | dt | dimensions of the dropout (int) | `0.3910` | no
-| optimizer    | op | kind of optimizer used (str) | `adam` | no
 | max_senten_len    | ml | the maximum lenght of a sentence (int) | `500` | no
 | vocab    | vb | vocab (int) | `1000000` | no
 | max_epoch    | me | the maximum numbers of epochs (int) | `50` | no

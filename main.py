@@ -10,7 +10,6 @@ from argparse import ArgumentParser
 
 from read_data import my_prepare_input
 from models.fake_flow import FakeFlow
-from pathlib import Path
 
 # # Reproducibility
 # np.random.seed(0)
@@ -41,7 +40,6 @@ if __name__ == '__main__':
     parser.add_argument("-d2", "--dense_2", help="dense 2", default=8, type=int)
     parser.add_argument("-d3", "--dense_3", help="dense 3", default=8, type=int)
     parser.add_argument("-dt", "--dropout", help="dropout", default=0.3910, type=float)
-    parser.add_argument("-op", "--optimizer", help="optimizer", default="adam", type=str)
     parser.add_argument("-ml", "--max_senten_len", help="max sentence length", default=500, type=int)
     parser.add_argument("-vb", "--vocab", help="vocab", default=1000000, type=int)
     parser.add_argument("-me", "--max_epoch", help="max epoch", default=50, type=int)
