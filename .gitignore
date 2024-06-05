@@ -168,3 +168,4 @@ features/hurtful/*
 features/hyperbolic/*
 features/imageability/*
 outputs/*
+analysis/figures/*
