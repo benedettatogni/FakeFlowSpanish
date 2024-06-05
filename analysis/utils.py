@@ -339,22 +339,22 @@ def create_colored_html_with_rectangle(original_text, attn_indices):
     # Select grey color:
     square_colors = [square_colors[x] for x in attn_indices]
 
-    # Imposta una larghezza fissa per testo e legenda
+    # fixed width for the text
     text_width = 900
 
-    # Imposta una larghezza più piccola per la voce "trust" nella legenda
+    # smallest width for "trust"
     highlighted_word_width = 60
 
-    # Imposta la larghezza specifica per la voce "anticipation" nella legenda
+    # biggest width for "anticipation" 
     anticipation_width = 90
 
-    # Aumenta la larghezza dei quadrati
+    # width of the squares
     square_width = 20
 
-    # Aggiorna la larghezza per i paragrafi del testo in modo da corrispondere alla larghezza della legenda
+   
     colored_lines = [f'<div style="background-color: {square_colors[i]}; height: 1em; width: {square_width}px; float: left; border: 1px solid gray; margin-right: 10px;"></div><p style="width: {text_width}px;">{line}</p>' for i, line in enumerate(original_text.split('\n')[:5])]
 
-    # Aggiorna la larghezza della voce "trust" e "anticipation" nella legenda, imposta il display inline-block
+  
     legend_content = "".join([f'<span style="margin-right: 10px; background-color:{dict_colors[emotion]}; padding: 3px; width: {highlighted_word_width if emotion != "anticipation" else anticipation_width}px; display: inline-block;"><strong style="color:black;">{emotion.capitalize()}</strong></span>' for emotion in sorted_emotions])
 
     html_content = f"""
