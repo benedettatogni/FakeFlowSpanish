@@ -25,16 +25,35 @@ To run the code for our experiments, we assume the following directory structure
 
 ```bash
 FakeFlowSpanish
+   ├── analysis
+   │   ├── inspect_dataset.ipynb
+   │   └── utils.py
    ├── data
    │   ├── development.tsv
    │   ├── train.tsv
    │   └── test.tsv
    ├── features
-   │   ├── xxxxxxxxx
-   │   └── xxxxxxxxx
-   └── inputs
-       ├── xxxxxxxxx
-       └── xxxxxxxxx
+   │   ├── all_features
+   │   │    └── loading_selected_lexion.py
+   │   ├── emotional
+   │   │    └── Spanish-NRC-EmoLex.txt   
+   │   ├── hurtful
+   │   │    └── hurtlex_ES.tsv 
+   │   ├── hyperbolic
+   │   │    └── hyperbolic_es.txt 
+   │   ├── imageability
+   │   │    └── imageability_es.csv 
+   │   ├── sentiment/
+   │   ├── building_features.py
+   │   └── SBW-vectos-300-min.txt
+   ├── models
+   │   └── fake_flow.py
+   ├── outputs/
+   ├── processed_files/
+   ├── main.py
+   ├── process_resources.py
+   └── read_data.py
+
 ```
 
 ### Installation
